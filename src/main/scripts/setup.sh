@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-THIS_DIR=$(dirname $(readlink -f $0))
-export ROOT_DIR=$(dirname $(readlink -f ${THIS_DIR}/../..))
+SCRIPT_DIRECTORY=$(dirname $(readlink -f $0))
+export PROJECT_ROOT=$(dirname $(readlink -f ${SCRIPT_DIRECTORY}/../..))
 
-export LOCAL_HDFS=${ROOT_DIR}/target/hdfs/
+export LOCAL_HDFS=${PROJECT_ROOT}/target/hdfs/
 mkdir -p ${LOCAL_HDFS}
 
