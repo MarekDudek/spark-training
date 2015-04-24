@@ -7,11 +7,13 @@ source ${THIS_DIR}/setup.sh
 WORDCOUNT=${LOCAL_HDFS}/wordcount
 mkdir -p ${WORDCOUNT}
 
-if [ -d ${WORDCOUNT}/output ]; then
-    rm -r ${WORDCOUNT}/output
+WORDCOUNT_OUTPUT=${WORDCOUNT}/output
+
+if [ -d ${WORDCOUNT_OUTPUT} ]; then
+    rm -r ${WORDCOUNT_OUTPUT}
 fi
 
 spark-submit --class interretis.sparktraining.Wordcount \
-    ./target/*.jar \
-    ./src/main/resources/words.txt \
-    ./target/hdfs/wordcount/output
+    ${ROOT_DIR}/target/*.jar \
+    ${ROOT_DIR}/src/main/resources/words.txt \
+    ${WORDCOUNT_OUTPUT}
