@@ -33,15 +33,10 @@ public class Wordcount {
         }
     };
 
-    private JavaRDD<String> input;
+    private final JavaRDD<String> input;
 
     private String inputPath;
     private String outputPath;
-
-    public Wordcount(final String inputPath, final String outputPath) {
-        this.inputPath = inputPath;
-        this.outputPath = outputPath;
-    }
 
     public Wordcount(final JavaRDD<String> input) {
         this.input = input;
@@ -56,28 +51,19 @@ public class Wordcount {
         final String inputPath = args[0];
         final String outputPath = args[1];
 
-        final Wordcount wordcount = new Wordcount(inputPath, outputPath);
-
         final SparkConf config = new SparkConf();
         config.setAppName("Wordcount with Spark in Java");
 
         final JavaSparkContext context = new JavaSparkContext(config);
 
-        wordcount.runJob(context);
-    }
-
-    public void runJob(final JavaSparkContext context) {
-
         final JavaRDD<String> input = context.textFile(inputPath);
+        final Wordcount wordcount = new Wordcount(input);
 
-        final JavaRDD<String> words = input.flatMap(SPLIT_TO_WORDS);
-        final JavaPairRDD<String, Integer> pairs = words.mapToPair(WORD_TO_PAIR);
-        final JavaPairRDD<String, Integer> counts = pairs.reduceByKey(COUNT_ADDER);
-
-        counts.saveAsTextFile(outputPath);
+        final JavaPairRDD<String, Integer> output = wordcount.runJob();
+        output.saveAsTextFile(outputPath);
     }
 
-    public JavaPairRDD<String, Integer> runJob2(final JavaSparkContext context) {
+    public JavaPairRDD<String, Integer> runJob() {
 
         final JavaRDD<String> words = input.flatMap(SPLIT_TO_WORDS);
         final JavaPairRDD<String, Integer> pairs = words.mapToPair(WORD_TO_PAIR);

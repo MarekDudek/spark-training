@@ -15,11 +15,9 @@ import scala.Tuple2;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class WordcountTest {
@@ -76,12 +74,14 @@ public class WordcountTest {
     public void test() throws IOException {
 
         // given
-        final Wordcount wordcount = new Wordcount("src/main/resources/words.txt", "target/hdfs/wordcount/output");
+        final JavaRDD<String> input = CONTEXT.textFile("src/main/resources/words.txt");
 
         // when
-        wordcount.runJob(CONTEXT);
+        wordcount = new Wordcount(input);
+        final JavaPairRDD<String, Integer> output = wordcount.runJob();
 
-        // then it doesn't break
+        // then
+        output.saveAsTextFile("target/hdfs/wordcount/output");
     }
 
     @Test
@@ -92,11 +92,10 @@ public class WordcountTest {
 
         // when
         wordcount = new Wordcount(input);
-        final JavaPairRDD<String, Integer> output = wordcount.runJob2(CONTEXT);
+        final JavaPairRDD<String, Integer> output = wordcount.runJob();
 
         // then
         final JavaPairRDD<String, Integer> expected = CONTEXT.parallelizePairs(TUPLES);
-
         assertThat(expected, new JavaPairRDDMatcher(output));
     }
 }
