@@ -3,6 +3,7 @@ package interretis.sparktraining;
 import org.apache.commons.io.FileUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,6 +27,12 @@ public class WordcountTest {
         config.setAppName("Wordcount");
 
         context = new JavaSparkContext(config);
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+
+        context.stop();
     }
 
     @Before
