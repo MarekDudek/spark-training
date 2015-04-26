@@ -97,21 +97,6 @@ public class WordcountTest {
         // then
         final JavaPairRDD<String, Integer> expected = CONTEXT.parallelizePairs(TUPLES);
 
-        final List<Tuple2<String, Integer>> expectedList = expected.collect();
-        final List<Tuple2<String, Integer>> outputList = output.collect();
-
-        assertThat(expectedList, hasSize(outputList.size()));
-
-        Collections.sort(expectedList, TUPLE_2_COMPARATOR);
-        Collections.sort(outputList, TUPLE_2_COMPARATOR);
-
-        for (int i = 0; i < expectedList.size(); i++) {
-
-            final Tuple2<String, Integer> expectedTuple = expectedList.get(i);
-            final Tuple2<String, Integer> outputTuple = outputList.get(i);
-
-            final int result = TUPLE_2_COMPARATOR.compare(expectedTuple, outputTuple);
-            assertThat(result, is(equalTo(0)));
-        }
+        assertThat(expected, new JavaPairRDDMatcher(output));
     }
 }
