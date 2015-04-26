@@ -61,7 +61,7 @@ public class JavaPairRDDMatcher<FIRST, SECOND> extends TypeSafeMatcher<JavaPairR
     public void describeTo(final Description description) {
 
         if (actualSize != expectedSize) {
-            description.appendText(format("Counts didn't macth, expected was %d and actual %d", expectedSize, actualSize));
+            description.appendText(format("Counts didn't match, expected was %d and actual %d", expectedSize, actualSize));
             return;
         }
 

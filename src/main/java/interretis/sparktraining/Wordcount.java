@@ -35,12 +35,6 @@ public final class Wordcount {
         }
     };
 
-    private final JavaRDD<String> inputRdd;
-
-    public Wordcount(final JavaRDD<String> input) {
-        inputRdd = input;
-    }
-
     public static void main(final String... args) {
 
         if (args.length != 2) {
@@ -56,15 +50,15 @@ public final class Wordcount {
         final JavaSparkContext context = new JavaSparkContext(config);
 
         final JavaRDD<String> input = context.textFile(inputPath);
-        final Wordcount wordcount = new Wordcount(input);
+        final Wordcount wordcount = new Wordcount();
 
-        final JavaPairRDD<String, Integer> output = wordcount.runJob();
+        final JavaPairRDD<String, Integer> output = wordcount.runJob(input);
         output.saveAsTextFile(outputPath);
     }
 
-    public JavaPairRDD<String, Integer> runJob() {
+    public JavaPairRDD<String, Integer> runJob(final JavaRDD<String> input) {
 
-        final JavaRDD<String> words = inputRdd.flatMap(SPLIT_TO_WORDS);
+        final JavaRDD<String> words = input.flatMap(SPLIT_TO_WORDS);
         final JavaPairRDD<String, Integer> pairs = words.mapToPair(WORD_TO_PAIR);
         final JavaPairRDD<String, Integer> counts = pairs.reduceByKey(COUNT_ADDER);
 

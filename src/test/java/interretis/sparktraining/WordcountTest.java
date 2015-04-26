@@ -20,23 +20,23 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThat;
 
-public class WordcountTest {
+public final class WordcountTest {
 
     /** System under test. */
     private Wordcount wordcount;
 
     private static List<String> LINES;
-    private static List<Tuple2<String, Integer>> TUPLES = asList(
-            new Tuple2<String, Integer>("one", 10),
-            new Tuple2<String, Integer>("two", 9),
-            new Tuple2<String, Integer>("three", 8),
-            new Tuple2<String, Integer>("four", 7),
-            new Tuple2<String, Integer>("five", 6),
-            new Tuple2<String, Integer>("six", 5),
-            new Tuple2<String, Integer>("seven", 4),
-            new Tuple2<String, Integer>("eight", 3),
-            new Tuple2<String, Integer>("nine", 2),
-            new Tuple2<String, Integer>("ten", 1)
+    private static final List<Tuple2<String, Integer>> TUPLES = asList(
+            new Tuple2<>("one", 10),
+            new Tuple2<>("two", 9),
+            new Tuple2<>("three", 8),
+            new Tuple2<>("four", 7),
+            new Tuple2<>("five", 6),
+            new Tuple2<>("six", 5),
+            new Tuple2<>("seven", 4),
+            new Tuple2<>("eight", 3),
+            new Tuple2<>("nine", 2),
+            new Tuple2<>("ten", 1)
     );
 
     private static SparkConf CONFIG;
@@ -70,31 +70,31 @@ public class WordcountTest {
     }
 
     @Test
-    public void test() throws IOException {
+    public void test() {
 
         // given
         final JavaRDD<String> input = CONTEXT.textFile("src/main/resources/words.txt");
 
         // when
-        wordcount = new Wordcount(input);
-        final JavaPairRDD<String, Integer> output = wordcount.runJob();
+        wordcount = new Wordcount();
+        final JavaPairRDD<String, Integer> output = wordcount.runJob(input);
 
         // then
         output.saveAsTextFile("target/hdfs/wordcount/output");
     }
 
     @Test
-    public void second_test() throws IOException {
+    public void second_test() {
 
         // given
         final JavaRDD<String> input = CONTEXT.parallelize(LINES);
 
         // when
-        wordcount = new Wordcount(input);
-        final JavaPairRDD<String, Integer> output = wordcount.runJob();
+        wordcount = new Wordcount();
+        final JavaPairRDD<String, Integer> output = wordcount.runJob(input);
 
         // then
         final JavaPairRDD<String, Integer> expected = CONTEXT.parallelizePairs(TUPLES);
-        assertThat(expected, new JavaPairRDDMatcher(output));
+        assertThat(expected, new JavaPairRDDMatcher<String, Integer>(output));
     }
 }
