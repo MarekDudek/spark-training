@@ -25,7 +25,6 @@ public class WordcountTest {
     /** System under test. */
     private Wordcount wordcount;
 
-    private static final Tuple2Comparator TUPLE_2_COMPARATOR = new Tuple2Comparator();
     private static List<String> LINES;
     private static List<Tuple2<String, Integer>> TUPLES = asList(
             new Tuple2<String, Integer>("one", 10),

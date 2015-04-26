@@ -3,7 +3,9 @@ package interretis.sparktraining;
 import com.google.common.collect.ComparisonChain;
 import scala.Tuple2;
 
-public class Tuple2Comparator<FIRST extends Comparable<FIRST>, SECOND extends Comparable<SECOND>> implements java.util.Comparator<Tuple2<FIRST, SECOND>> {
+import java.io.Serializable;
+
+public final class Tuple2Comparator<FIRST extends Comparable<FIRST>, SECOND extends Comparable<SECOND>> implements java.util.Comparator<Tuple2<FIRST, SECOND>>, Serializable {
 
     @Override
     public int compare(final Tuple2<FIRST, SECOND> first, final Tuple2<FIRST, SECOND> second) {

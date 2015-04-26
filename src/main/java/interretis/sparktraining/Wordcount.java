@@ -11,34 +11,34 @@ import scala.Tuple2;
 
 import java.util.Arrays;
 
-public class Wordcount {
+public final class Wordcount {
 
-    public static final FlatMapFunction<String, String> SPLIT_TO_WORDS = new FlatMapFunction<String, String>() {
+    private static final FlatMapFunction<String, String> SPLIT_TO_WORDS = new FlatMapFunction<String, String>() {
         @Override
-        public Iterable<String> call(final String string) throws Exception {
+        public Iterable<String> call(final String string) {
             final String[] words = string.split("\\W+");
             return Arrays.asList(words);
         }
     };
 
-    public static final PairFunction<String, String, Integer> WORD_TO_PAIR = new PairFunction<String, String, Integer>() {
+    private static final PairFunction<String, String, Integer> WORD_TO_PAIR = new PairFunction<String, String, Integer>() {
         @Override
-        public Tuple2<String, Integer> call(final String word) throws Exception {
+        public Tuple2<String, Integer> call(final String word) {
             return new Tuple2<>(word, Integer.valueOf(1));
         }
     };
-    
-    public static final Function2<Integer, Integer, Integer> COUNT_ADDER = new Function2<Integer, Integer, Integer>() {
+
+    private static final Function2<Integer, Integer, Integer> COUNT_ADDER = new Function2<Integer, Integer, Integer>() {
         @Override
-        public Integer call(final Integer accumulator, final Integer count) throws Exception {
+        public Integer call(final Integer accumulator, final Integer count) {
             return Integer.valueOf(accumulator.intValue() + count.intValue());
         }
     };
 
-    private final JavaRDD<String> input;
+    private final JavaRDD<String> inputRdd;
 
     public Wordcount(final JavaRDD<String> input) {
-        this.input = input;
+        inputRdd = input;
     }
 
     public static void main(final String... args) {
@@ -64,7 +64,7 @@ public class Wordcount {
 
     public JavaPairRDD<String, Integer> runJob() {
 
-        final JavaRDD<String> words = input.flatMap(SPLIT_TO_WORDS);
+        final JavaRDD<String> words = inputRdd.flatMap(SPLIT_TO_WORDS);
         final JavaPairRDD<String, Integer> pairs = words.mapToPair(WORD_TO_PAIR);
         final JavaPairRDD<String, Integer> counts = pairs.reduceByKey(COUNT_ADDER);
 
