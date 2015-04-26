@@ -20,12 +20,14 @@ public class Wordcount {
             return Arrays.asList(words);
         }
     };
+
     public static final PairFunction<String, String, Integer> WORD_TO_PAIR = new PairFunction<String, String, Integer>() {
         @Override
         public Tuple2<String, Integer> call(final String word) throws Exception {
             return new Tuple2<>(word, Integer.valueOf(1));
         }
     };
+    
     public static final Function2<Integer, Integer, Integer> COUNT_ADDER = new Function2<Integer, Integer, Integer>() {
         @Override
         public Integer call(final Integer accumulator, final Integer count) throws Exception {
@@ -34,9 +36,6 @@ public class Wordcount {
     };
 
     private final JavaRDD<String> input;
-
-    private String inputPath;
-    private String outputPath;
 
     public Wordcount(final JavaRDD<String> input) {
         this.input = input;
