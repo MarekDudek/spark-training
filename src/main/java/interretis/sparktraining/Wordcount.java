@@ -33,6 +33,14 @@ public class Wordcount {
         }
     };
 
+    private final String inputPath;
+    private final String outputPath;
+
+    public Wordcount(final String inputPath, final String outputPath) {
+        this.inputPath = inputPath;
+        this.outputPath = outputPath;
+    }
+
     public static void main(final String... args) {
 
         if (args.length != 2) {
@@ -42,9 +50,16 @@ public class Wordcount {
         final String inputPath = args[0];
         final String outputPath = args[1];
 
+        final Wordcount wordcount = new Wordcount(inputPath, outputPath);
+
         final SparkConf config = new SparkConf();
         config.setAppName("Wordcount with Spark in Java");
         final JavaSparkContext context = new JavaSparkContext(config);
+
+        wordcount.runJob(context);
+    }
+
+    public void runJob(final JavaSparkContext context) {
 
         final JavaRDD<String> input = context.textFile(inputPath);
         final JavaRDD<String> words = input.flatMap(SPLIT_TO_WORDS);
