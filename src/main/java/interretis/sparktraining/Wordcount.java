@@ -54,6 +54,7 @@ public class Wordcount {
 
         final SparkConf config = new SparkConf();
         config.setAppName("Wordcount with Spark in Java");
+
         final JavaSparkContext context = new JavaSparkContext(config);
 
         wordcount.runJob(context);
@@ -62,6 +63,7 @@ public class Wordcount {
     public void runJob(final JavaSparkContext context) {
 
         final JavaRDD<String> input = context.textFile(inputPath);
+
         final JavaRDD<String> words = input.flatMap(SPLIT_TO_WORDS);
         final JavaPairRDD<String, Integer> pairs = words.mapToPair(WORD_TO_PAIR);
         final JavaPairRDD<String, Integer> counts = pairs.reduceByKey(COUNT_ADDER);
