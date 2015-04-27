@@ -3,9 +3,11 @@ package interretis.sparktraining.counties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
-public class CountyRecord {
+public class CountyRecord implements Serializable {
 
     public static CountyRecord fromLine(final String line) {
 
