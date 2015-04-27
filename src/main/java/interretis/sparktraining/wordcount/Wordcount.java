@@ -1,4 +1,4 @@
-package interretis.sparktraining;
+package interretis.sparktraining.wordcount;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;

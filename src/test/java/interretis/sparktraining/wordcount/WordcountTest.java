@@ -1,7 +1,8 @@
-package interretis.sparktraining;
+package interretis.sparktraining.wordcount;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
+import interretis.sparktraining.JavaPairRDDMatcher;
 import org.apache.commons.io.FileUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
