@@ -1,13 +1,21 @@
 package interretis.sparktraining.counties;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import java.io.Serializable;
 
-@Data
-@AllArgsConstructor
 public class CountyRecord implements Serializable {
+
+    private CountyRecord(String county, String state, long population, long housingUnits, double totalArea, double waterArea, double landArea, double densityPop, double densityHousing) {
+
+        this.county = county;
+        this.state = state;
+        this.population = population;
+        this.housingUnits = housingUnits;
+        this.totalArea = totalArea;
+        this.waterArea = waterArea;
+        this.landArea = landArea;
+        this.densityPop = densityPop;
+        this.densityHousing = densityHousing;
+    }
 
     public static CountyRecord fromLine(final String line) {
 
@@ -41,4 +49,8 @@ public class CountyRecord implements Serializable {
 
     private double densityPop;
     private double densityHousing;
+
+    public String getState() {
+        return state;
+    }
 }
